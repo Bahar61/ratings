@@ -9,6 +9,8 @@ from model import connect_to_db, db
 from server import app
 from datetime import datetime
 
+
+
 def load_users():
     """Load users from u.user into database."""
 
@@ -34,10 +36,11 @@ def load_users():
     db.session.commit()
 
 
+
 def load_movies():
     """Load movies from u.item into database."""
 
-    print("Movie")
+    print("Movies")
 
     # Delete all rows in table, so if we need to run this a second time,
     # we won't be trying to add duplicate movies
@@ -46,12 +49,15 @@ def load_movies():
     # Read u.item file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip()
-        movie_id, title, released_date, unknown, imdb_url = row.split("|")[:4]
+        movie_id, title, released_date, unknown, imdb_url = row.split("|")[:5]
 
         if released_date:
             released_date = datetime.strptime(released_date, "%d-%b-%Y")
         else:
             released_date = None
+
+        if title:
+            title = title[:-6]
 
         movie = Movie(movie_id=movie_id,
                       title=title,
@@ -65,8 +71,32 @@ def load_movies():
     db.session.commit()
 
 
+
 def load_ratings():
     """Load ratings from u.data into database."""
+
+    print("Ratings")
+
+    # Delete all rows in table, so if we need to run this a second time,
+    # we won't be trying to add duplicate ratings
+    Rating.query.delete()
+
+    # Read u.data file and insert data
+    for row in open("seed_data/u.data"):
+        row = row.rstrip()
+        rating_id, movie_id, user_id, score = row.split()
+
+        rating = Rating(rating_id=rating_id,
+                        movie_id=movie_id,
+                        user_id=user_id,
+                        score=score)
+
+        #add to the session to store
+        db.session.add(rating)
+
+    #commit the work
+    db.session.commit()
+
 
 
 def set_val_user_id():
