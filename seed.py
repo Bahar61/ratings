@@ -51,18 +51,24 @@ def load_movies():
         row = row.rstrip()
         movie_id, title, released_date, unknown, imdb_url = row.split("|")[:5]
 
+        #convert string time to Datetime
         if released_date:
             released_date = datetime.strptime(released_date, "%d-%b-%Y")
         else:
             released_date = None
 
-        if title:
-            title = title[:-6]
+
+        #slice title to remove duplicate year releaser 
+        title = title[:-7]
+
+        # #encoding text file to the ‘latin-1’
+        # title = title.decode("latin-1")
 
         movie = Movie(movie_id=movie_id,
                       title=title,
                       released_date=released_date,
                       imdb_url=imdb_url)
+
 
         #add to the session to store
         db.session.add(movie)
@@ -84,10 +90,9 @@ def load_ratings():
     # Read u.data file and insert data
     for row in open("seed_data/u.data"):
         row = row.rstrip()
-        rating_id, movie_id, user_id, score = row.split()
+        movie_id, user_id, score, timestamp = row.split()
 
-        rating = Rating(rating_id=rating_id,
-                        movie_id=movie_id,
+        rating = Rating(movie_id=movie_id,
                         user_id=user_id,
                         score=score)
 

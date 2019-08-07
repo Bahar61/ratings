@@ -33,7 +33,7 @@ class User(db.Model):
 class Movie(db.Model):
     """Movies to be rated """
 
-    __tablename__ = "movie"
+    __tablename__ = "movies"
     # movie model class
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
@@ -45,7 +45,7 @@ class Movie(db.Model):
 class Rating(db.Model):
     """Rating of the movies"""
 
-    __tablename__ = "rating"
+    __tablename__ = "ratings"
     # rating model class
 
     rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
