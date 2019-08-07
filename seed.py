@@ -49,7 +49,7 @@ def load_movies():
     # Read u.item file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip()
-        movie_id, title, released_date, unknown, imdb_url = row.split("|")[:5]
+        movie_id, title, released_date, _, imdb_url, *_rest = row.split("|")
 
         #convert string time to Datetime
         if released_date:
@@ -58,11 +58,8 @@ def load_movies():
             released_date = None
 
 
-        #slice title to remove duplicate year releaser 
-        title = title[:-7]
+        title = title[:-7]  # remove year from title
 
-        # #encoding text file to the ‘latin-1’
-        # title = title.decode("latin-1")
 
         movie = Movie(movie_id=movie_id,
                       title=title,
@@ -70,10 +67,10 @@ def load_movies():
                       imdb_url=imdb_url)
 
 
-        #add to the session to store
+        # add to the session to store
         db.session.add(movie)
 
-    #commit the work
+    # commit the work
     db.session.commit()
 
 
