@@ -40,6 +40,15 @@ class Movie(db.Model):
     title = db.Column(db.Text, nullable=False)
     released_date = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.Text, nullable=True)
+
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return f"""<Movie movie_id={self.movie_id} 
+                   title={self.title} 
+                   released_date={self.released_date}
+                   imdb_url={self.imdb_url}>"""
     
 
 class Rating(db.Model):
@@ -53,7 +62,13 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
     
+    def __repr__(self):
+        """Provide helpful representation when printed."""
 
+        return f"""<Rating rating_id={self.rating_id} 
+                   movie_id={self.movie_id} 
+                   user_id={self.user_id} 
+                   score={self.score}>"""
 ##############################################################################
 # Helper functions
 
@@ -65,6 +80,8 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
+
+
 
 
 if __name__ == "__main__":
