@@ -30,6 +30,7 @@ class User(db.Model):
         return f"<User user_id={self.user_id} email={self.email}>"
 
 
+    
 class Movie(db.Model):
     """Movies to be rated """
 
@@ -49,6 +50,8 @@ class Movie(db.Model):
                    title={self.title} 
                    released_date={self.released_date}
                    imdb_url={self.imdb_url}>"""
+
+
     
 
 class Rating(db.Model):
@@ -58,9 +61,24 @@ class Rating(db.Model):
     # rating model class
 
     rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    movie_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
+    movie_id = db.Column(db.Integer,
+                         db.ForeignKey('movies.movie_id'))
+    user_id = db.Column(db.Integer, 
+                        db.ForeignKey('users.user_id'))
     score = db.Column(db.Integer, nullable=False)
+
+
+
+    # Define relationship to user
+    user = db.relationship("User",
+                           backref=db.backref("ratings",
+                                              order_by=rating_id))
+
+    # Define relationship to movie
+    movie = db.relationship("Movie",
+                            backref=db.backref("ratings",
+                                               order_by=rating_id))
+
     
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -69,6 +87,7 @@ class Rating(db.Model):
                    movie_id={self.movie_id} 
                    user_id={self.user_id} 
                    score={self.score}>"""
+
 ##############################################################################
 # Helper functions
 

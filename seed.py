@@ -100,6 +100,18 @@ def load_ratings():
     db.session.commit()
 
 
+def set_val_movie_id():
+    """Set value for the next user_id after seeding database"""
+
+    # Get the Max user_id in the database
+    result = db.session.query(func.max(Movie.movie_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('movies_movie_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
 
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
